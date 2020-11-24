@@ -23,6 +23,9 @@ This dataset consists of __2012 images__ belonging to two classes:
 *	__without_mask: 1006 images__
 
 ### :key: Results
+![](https://github.com/koushik2001/COVID-19-Face-Mask-Detector-with-OpenCV-and-Deep-Learning/blob/main/Docs/accuracy.png)
+![](https://github.com/koushik2001/COVID-19-Face-Mask-Detector-with-OpenCV-and-Deep-Learning/blob/main/Docs/loss.png)
+
 
 
 
