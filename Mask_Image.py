@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 prototxt = r'C:\Users\saiko\Desktop\deploy.prototxt'
 
-weights_path = r'C:\Users\saiko\Desktop\res10_300x300_ssd_iter_140000.caffemodel'
+weights_path = r'C:\Users\saiko\Desktop\SSD.caffemodel'
 
 net = cv2.dnn.readNet(prototxt,weights_path)
 
