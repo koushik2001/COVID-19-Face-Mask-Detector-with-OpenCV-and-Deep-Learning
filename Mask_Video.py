@@ -1,104 +1,72 @@
-from tensorflow.keras.preprocessing.image import img_to_array
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
-from tensorflow.keras.models import load_model
-import numpy as np
 import cv2
-import os
-from imutils.video import VideoStream
-import imutils
+from tensorflow.keras.models import load_model
+from keras.preprocessing.image import load_img , img_to_array
+import numpy as np
 
+model =load_model('new_improved_model.h5')
 
+img_width , img_height = 300,300
 
-def detect_and_predict_mask(frame,faceNet,maskNet):
-    #grab the dimensions of the frame and then construct a blob
-    (h,w)=frame.shape[:2]
-    blob=cv2.dnn.blobFromImage(frame,1.0,(300,300),(104.0,177.0,123.0))
-    
-    faceNet.setInput(blob)
-    detections=faceNet.forward()
-    
-    #initialize our list of faces, their corresponding locations and list of predictions
-    
-    faces=[]
-    locs=[]
-    preds=[]
-    
-    
-    for i in range(0,detections.shape[2]):
-        confidence=detections[0,0,i,2]
-    
-    
-        if confidence>0.5:
-        #we need the X,Y coordinates
-            box=detections[0,0,i,3:7]*np.array([w,h,w,h])
-            (startX,startY,endX,endY)=box.astype('int')
-        
-            #ensure the bounding boxes fall within the dimensions of the frame
-            (startX,startY)=(max(0,startX),max(0,startY))
-            (endX,endY)=(min(w-1,endX), min(h-1,endY))
-        
-            #extract the face ROI, convert it from BGR to RGB channel, resize it to 224,224 and preprocess it
-            face=frame[startY:endY, startX:endX]
-            face=cv2.cvtColor(face,cv2.COLOR_BGR2RGB)
-            face=cv2.resize(face,(300,300))
-            face=img_to_array(face)    
-            #face=preprocess_input(face)    
-            faces.append(face)
-            locs.append((startX,startY,endX,endY))
-        
-        #only make a predictions if atleast one face was detected
-        if len(faces)>0:
-            faces=np.array(faces,dtype='float32')
-            preds=maskNet.predict(faces,batch_size=12)
-        
-        return (locs,preds)
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
+cap = cv2.VideoCapture('video.mp4')
 
+img_count_full = 0
 
-prototxt = r'C:\Users\saiko\Desktop\deploy.prototxt'
-
-weights_path = r'C:\Users\saiko\Desktop\res10_300x300_ssd_iter_140000.caffemodel'
-
-faceNet=cv2.dnn.readNet(prototxt,weights_path)
-
-
-maskNet = load_model(r'C:\Users\saiko\Desktop\new_improved_model.h5')
-
-
-vs=VideoStream(src=0).start()
+font = cv2.FONT_HERSHEY_SIMPLEX
+org = (1,1)
+class_label = ''
+fontScale = 1
+color = (255,0,0)
+thickness = 2
 
 while True:
-    #grab the frame from the threaded video stream and resize it
-    #to have a maximum width of 400 pixels
-    frame=vs.read()
-    frame=imutils.resize(frame,width=400)
-    
-    #detect faces in the frame and preict if they are waring masks or not
-    (locs,preds)=detect_and_predict_mask(frame,faceNet,maskNet)
-    
-    #loop over the detected face locations and their corrosponding loactions
-    
-    for (box,pred) in zip(locs,preds):
-        (startX,startY,endX,endY)=box
-        #(mask,withoutMask)=pred
-        
-        #determine the class label and color we will use to draw the bounding box and text
-        label='Mask' if pred==0 else 'No Mask'
-        color=(0,255,0) if label=='Mask' else (0,0,255)
-        
-        #display the label and bounding boxes
-        cv2.putText(frame,label,(startX,startY-10),cv2.FONT_HERSHEY_SIMPLEX,0.45,color,2)
-        
-        cv2.rectangle(frame,(startX,startY),(endX,endY),color,2)
-        
-    #show the output frame
-    cv2.imshow("Frame",frame)
-    key=cv2.waitKey(1) & 0xFF
-    
-    if key==ord('q'):
-        break
-        
+	img_count_full += 1
+	response , color_img = cap.read()
+
+	if response == False:
+		break
+
+
+	scale = 50
+	width = int(color_img.shape[1]*scale /100)
+	height = int(color_img.shape[0]*scale/100)
+	dim = (width,height)
+
+	color_img = cv2.resize(color_img, dim ,interpolation= cv2.INTER_AREA)
+
+	gray_img = cv2.cvtColor(color_img,cv2.COLOR_BGR2GRAY)
+
+	faces = face_cascade.detectMultiScale(gray_img, 1.1, 6)
+
+	img_count = 0
+	for (x,y,w,h) in faces:
+		org = (x-10,y-10)
+		img_count += 1
+		color_face = color_img[y:y+h,x:x+w]
+		cv2.imwrite('input/%d%dface.jpg'%(img_count_full,img_count),color_face)
+		img = load_img('input/%d%dface.jpg'%(img_count_full,img_count),target_size=(img_width,img_height))
+		img = img_to_array(img)
+		img = np.expand_dims(img,axis=0)
+		prediction = model.predict(img)
+
+
+		if prediction==0:
+			class_label = "Mask"
+			color = (255,0,0)
+
+		else:
+			class_label = "No Mask"
+			color = (0,255,0)
+
+
+		cv2.rectangle(color_img,(x,y),(x+w,y+h),(0,0,255),3)
+		cv2.putText(color_img, class_label, org, font ,fontScale, color, thickness,cv2.LINE_AA)
+
+	cv2.imshow('Face mask detection', color_img)
+	if cv2.waitKey(1) & 0xFF == ord('q'):
+		break
+
+cap.release()
 cv2.destroyAllWindows()
-vs.stop()
-        
-  
+
