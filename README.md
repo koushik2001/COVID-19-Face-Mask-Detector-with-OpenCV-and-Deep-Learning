@@ -24,7 +24,10 @@ This dataset consists of __2012 images__ belonging to two classes:
 ![](https://github.com/koushik2001/COVID-19-Face-Mask-Detector-with-OpenCV-and-Deep-Learning/blob/main/Docs/loss.png)
 
 ### Working Demo
-![](https://github.com/koushik2001/COVID-19-Face-Mask-Detector-with-OpenCV-and-Deep-Learning/blob/main/Docs/multiplemasksgithubop.PNG) ![](https://github.com/koushik2001/COVID-19-Face-Mask-Detector-with-OpenCV-and-Deep-Learning/blob/main/Docs/nomaskgithubop.PNG) 
+![](https://github.com/koushik2001/COVID-19-Face-Mask-Detector-with-OpenCV-and-Deep-Learning/blob/main/Docs/multiplemasksgithubop.PNG) ![](https://github.com/koushik2001/COVID-19-Face-Mask-Detector-with-OpenCV-and-Deep-Learning/blob/main/Docs/nomaskgithubop.PNG)
+
+![Live Demo](https://github.com/koushik2001/COVID-19-Face-Mask-Detector-with-OpenCV-and-Deep-Learning/blob/main/Docs/gitttt.gif)
+
 
 
 
