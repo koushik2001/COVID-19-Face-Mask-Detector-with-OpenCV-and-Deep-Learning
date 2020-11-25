@@ -1,5 +1,4 @@
 from tensorflow.keras.preprocessing.image import img_to_array
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.models import load_model
 import numpy as np
 import cv2
@@ -57,7 +56,7 @@ def detect_and_predict_mask(frame,faceNet,maskNet):
 
 prototxt = r'C:\Users\saiko\Desktop\deploy.prototxt'
 
-weights_path = r'C:\Users\saiko\Desktop\res10_300x300_ssd_iter_140000.caffemodel'
+weights_path = r'C:\Users\saiko\Desktop\SSD.caffemodel'
 
 faceNet=cv2.dnn.readNet(prototxt,weights_path)
 
