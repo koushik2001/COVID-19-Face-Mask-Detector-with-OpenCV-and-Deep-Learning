@@ -1,5 +1,5 @@
 # COVID-19: Face Mask Detector with OpenCV and Deep Learning
-[![HitCount](http://hits.dwyl.com/koushik2001/COVID-19-Face-Mask-Detector-with-OpenCV-and-Deep-Learning.svg)](http://hits.dwyl.com/koushik2001/COVID-19-Face-Mask-Detector-with-OpenCV-and-Deep-Learning)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fkoushik2001%2FCOVID-19-Face-Mask-Detector-with-OpenCV-and-Deep-Learning&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=true)](https://hits.seeyoufarm.com)
 
 #### Face Mask Detection system built with OpenCV, Keras/TensorFlow using Deep Learning and Computer Vision concepts in order to detect face masks in static images as well as in real-time video streams.
 
